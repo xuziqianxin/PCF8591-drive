@@ -87,7 +87,7 @@ do{\
 #define IIC_RE(adr, data, size) \
 do{\
 	HAL_I2C_Master_Receive(&hi2c1, adr, data, size, 0x10);\
-}while(0)\
+}while(0)
 
 /**
 	* @brief Get the macro for IIC communication errors and replace it with the function of the target platform to complete the porting.
@@ -112,3 +112,4 @@ uint32_t PCF8951_Data_Transformation(uint8_t *digitalArray, double *floatArray, 
 #ifdef __cplusplus
 }
 #endif
+
