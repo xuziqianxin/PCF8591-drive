@@ -79,3 +79,47 @@ uint32_t PCF8951_Data_Transformation(uint8_t *digitalArray, double *floatArray, 
 	}
 	return 0;
 }
+
+void IIC_Transmit(I2C_TypeDef *I2Cx, uint8_t Address, uint8_t *pdata, uint16_t size)
+{
+	while( I2C_GetFlagStatus( I2Cx, I2C_FLAG_BUSY ) != RESET );
+
+	I2C_GenerateSTART(I2Cx, ENABLE);
+
+	while( !I2C_CheckEvent( I2Cx, I2C_EVENT_MASTER_MODE_SELECT ) );
+	I2C_Send7bitAddress( I2Cx, Address, I2C_Direction_Transmitter );
+
+	while( !I2C_CheckEvent( I2Cx, I2C_EVENT_MASTER_TRANSMITTER_MODE_SELECTED ) );
+
+	for(uint16_t i = 0; i < size; i++)
+	{
+		while(I2C_GetFlagStatus(I2Cx, I2C_FLAG_TXE) == RESET) ;
+		I2C_SendData( I2Cx, pdata[i] );
+		Delay_Ms(20);
+	}
+
+	while( !I2C_CheckEvent( I2Cx, I2C_EVENT_MASTER_BYTE_TRANSMITTED ) );
+	I2C_GenerateSTOP( I2Cx, ENABLE );
+}
+
+void IIC_Receive(I2C_TypeDef *I2Cx, uint8_t Address, uint8_t *pdata, uint16_t size)
+{
+	while( I2C_GetFlagStatus( I2Cx, I2C_FLAG_BUSY ) != RESET );
+
+	I2C_GenerateSTART(I2Cx, ENABLE);
+
+	while( !I2C_CheckEvent( I2Cx, I2C_EVENT_MASTER_MODE_SELECT ) );
+	I2C_Send7bitAddress( I2Cx, Address, I2C_Direction_Receiver );
+
+	while( !I2C_CheckEvent( I2Cx, I2C_EVENT_MASTER_RECEIVER_MODE_SELECTED ) );
+
+	for(uint16_t i = 0; i < size; i++)
+	{
+		while(I2C_GetFlagStatus(I2Cx, I2C_FLAG_RXNE) == RESET) ;
+		pdata[i] = I2C_ReceiveData( I2Cx );
+		Delay_Ms(20);
+	}
+
+	while( !I2C_CheckEvent( I2Cx, I2C_EVENT_MASTER_BYTE_RECEIVED ) );
+	I2C_GenerateSTOP( I2Cx, ENABLE );
+}

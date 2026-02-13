@@ -16,8 +16,7 @@
 extern "C"{
 #endif
 /* IIC LIB Includes ----------------------------------------------------------*/
-#include "main.h"
-#include "i2c.h"
+#include "ch32v30x_i2c.h"
 
 /* Define ------------------------------------------------------------*/
 /**
@@ -44,15 +43,15 @@ extern "C"{
 /**
 	* @brief Macro used to select ADC mode
 	*/
-#define PCF_AD_MODE_SINGLE_ENDED 		00
+#define PCF_AD_MODE_SINGLE_ENDED 	00
 #define PCF_AD_MODE_F_DIFFERENTIAL 	01
-#define PCF_AD_MODE_MIXED 					10
+#define PCF_AD_MODE_MIXED 			10
 #define PCF_AD_MODE_T_DIFFERENTIAL 	11
 
 /**
 	* @brief Used to select whether to enable the auto-increment bit
 	*/
-#define PCF_AUTO_INCREMENT_ENABLE		1
+#define PCF_AUTO_INCREMENT_ENABLE	1
 #define PCF_AUTO_INCREMENT_DISABLE 	0
 
 /**
@@ -75,7 +74,7 @@ extern "C"{
 	*/
 #define IIC_TRANSMIT(adr, data, size) \
 do{\
-	HAL_I2C_Master_Transmit(&hi2c1, adr, data, size, 0x10);\
+	IIC_Transmit(I2C1, adr, data, size);\
 }while(0)
 
 /**
@@ -86,13 +85,13 @@ do{\
 	*/
 #define IIC_RE(adr, data, size) \
 do{\
-	HAL_I2C_Master_Receive(&hi2c1, adr, data, size, 0x10);\
-}while(0)\
+	IIC_Receive(I2C1, adr, data, size);\
+}while(0)
 
 /**
 	* @brief Get the macro for IIC communication errors and replace it with the function of the target platform to complete the porting.
 	*/
-#define IIC_ERROR_FLAG HAL_I2C_GetError(&hi2c1)
+#define IIC_ERROR_FLAG 0
 
 /**
 	* @brief Macro for generating control bytes
@@ -108,6 +107,9 @@ uint32_t PCF8951_Init(uint8_t controlByte);
 uint32_t PCF8951_DAC_Output(uint8_t *pdata, uint16_t size);
 uint32_t PCF8951_ADC_intput(uint8_t *pdata, uint16_t size);
 uint32_t PCF8951_Data_Transformation(uint8_t *digitalArray, double *floatArray, uint16_t size, uint8_t transformatioMode);
+
+void IIC_Transmit(I2C_TypeDef *I2Cx, uint8_t Address, uint8_t *pdata, uint16_t size);
+void IIC_Receive(I2C_TypeDef *I2Cx, uint8_t Address, uint8_t *pdata, uint16_t size);
 
 #ifdef __cplusplus
 }
