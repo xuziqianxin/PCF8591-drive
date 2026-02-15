@@ -11,7 +11,7 @@
  
 #ifndef __PCF8951_H__
 #define __PCF8951_H__
-#endif
+
 #ifdef __cplusplus
 extern "C"{
 #endif
@@ -123,3 +123,4 @@ uint32_t PCF8951_Data_Transformation(uint8_t *digitalArray, double *floatArray, 
 #ifdef __cplusplus
 }
 #endif
+#endif /* __PCF8951_H__ */
