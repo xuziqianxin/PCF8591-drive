@@ -1,6 +1,7 @@
 # PCF8591-drive
 用于PCF8951的驱动库（基于STM32G431写的，移植方便）
 用例
+```
 #include "PCF8951.h"
 
 PFC8951_Typedef PCF8951 = { 0 };
@@ -30,3 +31,4 @@ int main()
     PCF8951_ADC_intput(PCF8951, rxData, sizeof(rxData));
     while(1);
 }
+```
