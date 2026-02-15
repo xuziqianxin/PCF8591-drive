@@ -11,7 +11,7 @@
  
 #ifndef __PCF8951_H__
 #define __PCF8951_H__
-#endif
+
 #ifdef __cplusplus
 extern "C"{
 #endif
@@ -125,3 +125,4 @@ void IIC_Receive(I2C_TypeDef *I2Cx, uint8_t Address, uint8_t *pdata, uint16_t si
 #ifdef __cplusplus
 }
 #endif
+#endif /* __PCF8951_H__ */
