@@ -2,8 +2,8 @@
  * @file    PCF8951.h
  * @brief   This document contains all the function prototypes of the PCF8951.c file
  * @author  虚字潜心(xu_zi_qian_xin)
- * @version 1.0.0
- * @date    2026-02-12
+ * @version 1.1.0
+ * @date    2026-02-15
  * 
  * @copyright Copyright (c) 2026 虚字潜心. All rights reserved.
  * @license  SPDX-License-Identifier: MIT
@@ -17,6 +17,17 @@ extern "C"{
 #endif
 /* IIC LIB Includes ----------------------------------------------------------*/
 #include "ch32v30x_i2c.h"
+
+/* Typedef ------------------------------------------------------------*/
+/**
+	* @brief Chip structure, facilitating communication management for multiple slave devices.
+	*/
+typedef struct PCF8951
+{
+	uint16_t PCF8951AddressWrite;			/* Chip Write Address */
+	uint16_t PCF8951AddressRead;			/* Chip reading address */
+	uint8_t PCF8951ControlByte;				/* controlByte The control byte used to initialize the chip can be generated using the PCF_CONTROL_BYTE macro. */
+} PFC8951_Typedef;
 
 /* Define ------------------------------------------------------------*/
 /**
@@ -103,9 +114,9 @@ do{\
 #define PCF_CONTROL_BYTE(outputFlag, inputMode, autoIncrementFlag, channelNumber) ((outputFlag << 6) + (inputMode << 4) + (autoIncrementFlag << 2) + channelNumber)
 
 /* Function ------------------------------------------------------------*/
-uint32_t PCF8951_Init(uint8_t controlByte);
-uint32_t PCF8951_DAC_Output(uint8_t *pdata, uint16_t size);
-uint32_t PCF8951_ADC_intput(uint8_t *pdata, uint16_t size);
+uint32_t PCF8951_Init(PFC8951_Typedef PCF8951);
+uint32_t PCF8951_DAC_Output(PFC8951_Typedef PCF8951, uint8_t *pdata, uint16_t size);
+uint32_t PCF8951_ADC_intput(PFC8951_Typedef PCF8951, uint8_t *pdata, uint16_t size);
 uint32_t PCF8951_Data_Transformation(uint8_t *digitalArray, double *floatArray, uint16_t size, uint8_t transformatioMode);
 
 void IIC_Transmit(I2C_TypeDef *I2Cx, uint8_t Address, uint8_t *pdata, uint16_t size);
